@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Pattern Gen</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		body {
+			margin: 0;
+			box-sizing: border-box;
+		}
+	</style>
+	<script type="module">
+		const rd_rgb = () => {
+			return `rgb(${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)})`
+		}
+
+		const grid = (offsetx, offsety, n, d, depth) => {
+			let svg = ''
+			for (let i = 0; i < n; i++) {
+				for (let j = 0; j < n; j++) {
+					// background
+					svg += `<rect x="${j * d + offsetx}" y="${i * d + offsety}" width="${d}" height="${d}" fill="${rd_rgb()}"/>`
+					let rd = Math.random()
+					switch (Math.floor(Math.random() * 11)) {
+						case 0:
+							svg += `<circle cx="${offsetx + j * d + 0.5 * d}" cy="${offsety + i * d + 0.5 * d}" r="${0.5 * d}" fill="${rd_rgb()}" />`
+							break
+						case 1:
+							svg += `<path d="M ${offsetx + j * d} ${offsety + i * d} a ${d} ${d} 0 0 ${Math.random() > 0.5 ? "1" : "0"} ${d} ${d}" fill="${rd_rgb()}" />`
+							break
+						case 2:
+							svg += `<path d="M ${offsetx + j * d} ${offsety + i * d + d} a ${d} ${d} 0 0 ${Math.random() > 0.5 ? "1" : "0"} ${d} -${d}" fill="${rd_rgb()}" />`
+							break
+						case 3:
+							svg += `<path d="M ${offsetx + j * d} ${offsety + i * d} a ${d} ${d} 0 0 1 ${d} ${d} M ${offsetx + j * d} ${offsety + i * d} a ${d} ${d} 0 0 0 ${d} ${d}" fill="${rd_rgb()}" />`
+							break
+						case 4:
+							svg += `<path d="M ${offsetx + j * d} ${offsety + i * d + d} a ${d} ${d} 0 0 1 ${d} -${d} M ${offsetx + j * d} ${offsety + i * d + d} a ${d} ${d} 0 0 0 ${d} -${d}" fill="${rd_rgb()}" />`
+							break
+						case 5:
+							svg += `<path d="M ${offsetx + j * d} ${offsety + i * d} a ${d} ${d} 0 0 ${Math.random() > 0.5 ? "1" : "0"} ${d} ${d} L ${offsetx + j * d} ${offsety + i * d + d} Z" fill="${rd_rgb()}" />`
+							break
+						case 6:
+							svg += `<path d="M ${offsetx + j * d} ${offsety + i * d + d} a ${d} ${d} 0 0 ${Math.random() > 0.5 ? "1" : "0"} ${d} -${d} L ${offsetx + j * d} ${offsety + i * d} Z" fill="${rd_rgb()}" />`
+							break
+						case 7:
+							svg += `<path d="M ${offsetx + j * d} ${offsety + i * d} h ${d} v ${d} Z" fill="${rd_rgb()}" />`
+							break
+						case 8:
+							if (depth > 0) svg += grid(offsetx + j * d, offsety + i * d, 4, d / 4, depth - 1)
+							break
+						case 9:
+							if (depth > 0) svg += grid(offsetx + j * d, offsety + i * d, 2, d / 2, depth - 1)
+							break
+						case 10:
+							if (depth > 0) svg += grid(offsetx + j * d, offsety + i * d, 8, d / 8, depth - 1)
+							break
+					}
+				}
+			}
+			return svg
+		}
+
+		let s = `<svg viewbox="0 0 ${10} ${10}">`
+		s += grid(0, 0, 10, 1, 2)
+		s += `</svg>`
+		document.body.innerHTML = s
+	</script>
+</head>
+
+<body>
+</body>
+
+</html>
